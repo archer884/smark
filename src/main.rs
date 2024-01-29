@@ -5,14 +5,6 @@ use std::{fs, io, process};
 use cli::Args;
 use pulldown_cmark::{html, Parser};
 
-type Result<T, E = Error> = std::result::Result<T, E>;
-
-#[derive(Debug, thiserror::Error)]
-enum Error {
-    #[error(transparent)]
-    IO(#[from] io::Error),
-}
-
 fn main() {
     if let Err(e) = run(Args::parse()) {
         eprintln!("{e}");
@@ -20,7 +12,7 @@ fn main() {
     }
 }
 
-fn run(args: Args) -> Result<()> {
+fn run(args: Args) -> io::Result<()> {
     let text = fs::read_to_string(&args.path)?;
     let parser = Parser::new(&text);
 
